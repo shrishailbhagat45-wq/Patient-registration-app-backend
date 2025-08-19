@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import dbConfig from 'src/config/db.Config';
+import dbConfig from './config/db.Config';
 import { ConfigModule } from '@nestjs/config';
 import { PatientController } from './patient/patient.controller';
 import { PatientService } from './patient/patient.service';
