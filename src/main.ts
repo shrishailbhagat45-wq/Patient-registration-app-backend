@@ -10,10 +10,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
   app.enableCors({
-    origin: ['https://your-frontend.vercel.app/*', 'http://localhost:3000/*'],
+    origin: ['https://your-frontend.vercel.app/*', 'http://localhost:3000/'],
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe());
+  await app.listen(process.env.PORT ?? 3000);
   await app.init();
 }
 

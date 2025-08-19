@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PatientController } from './patient/patient.controller';
 import { PatientService } from './patient/patient.service';
 import { PatientEntity } from './entities/patient.entity';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -13,7 +14,7 @@ import { PatientEntity } from './entities/patient.entity';
   }), TypeOrmModule.forRootAsync({
     useFactory: dbConfig,
   }), TypeOrmModule.forFeature([PatientEntity])],
-  controllers: [ PatientController],
+  controllers: [AppController, PatientController],
   providers: [PatientService],
 })
 export class AppModule {}
