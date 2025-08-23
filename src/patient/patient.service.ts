@@ -24,34 +24,60 @@ export class PatientService {
             throw new HttpException({status: HttpStatus.INTERNAL_SERVER_ERROR,error: 'Something went wrong'}, HttpStatus.INTERNAL_SERVER_ERROR, {cause: error});
         }
     }
-async getPatient(search) {
-    console.log('Searching for patients with name:', search.name);
-    try {
-        const data = await this.patientRepository.find({
-            where: { name: Like(`%${search.name}%`) }
-        });
-        console.log('Data retrieved from database:', data);
-        if (data.length === 0) {
+    async getPatient(search) {
+        console.log('Searching for patients with name:', search.name);
+        try {
+            const data = await this.patientRepository.find({
+                where: { name: Like(`%${search.name}%`) }
+            });
+            console.log('Data retrieved from database:', data);
+            if (data.length === 0) {
+                return {
+                    status: HttpStatus.NOT_FOUND,
+                    message: 'No patients found',
+                    data: [],
+                    error: null
+                };
+            }
             return {
-                status: HttpStatus.NOT_FOUND,
-                message: 'No patients found',
-                data: [],
+                status: HttpStatus.OK,
+                message: 'Patients retrieved successfully',
+                data: data,
                 error: null
             };
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong'
+            }, HttpStatus.INTERNAL_SERVER_ERROR, { cause: error });
         }
-        return {
-            status: HttpStatus.OK,
-            message: 'Patients retrieved successfully',
-            data: data,
-            error: null
-        };
-    } catch (error) {
-        throw new HttpException({
-            status: HttpStatus.INTERNAL_SERVER_ERROR,
-            error: 'Something went wrong'
-        }, HttpStatus.INTERNAL_SERVER_ERROR, { cause: error });
     }
-}
+    async getSinglePatient(id: number): Promise<any> {
+        try {
+            const data = await this.patientRepository.findOne({ where: { id } });
+            if (!data) {
+                return {
+                    status: HttpStatus.NOT_FOUND,
+                    message: 'Patient not found',
+                    data: null,
+                    error: 'No patient found with the given ID'
+                };
+            }       
+            return {
+                status: HttpStatus.OK,
+                message: 'Patient retrieved successfully',
+                data: data,
+                error: null
+            };
+        } catch (error) {
+            throw new HttpException({   
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong'
+            }, HttpStatus.INTERNAL_SERVER_ERROR, { cause: error });
+        }
+    }
+
+
     updatePatient(id: number, patientData: any): string {
         // Logic to update an existing patient
         return `Patient with ID ${id} updated successfully`;

@@ -5,7 +5,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 export class AppController {
 
     @Get()
-  getHello(): string {
-    return 'Hello from NestJS on Vercel!';
+  getHello(): object {
+    return {"message": "Welcome to the Patient Registration API", "status": 200};
   }
 }
