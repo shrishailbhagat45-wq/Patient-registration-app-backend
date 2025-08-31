@@ -6,6 +6,9 @@ import { PatientController } from './patient/patient.controller';
 import { PatientService } from './patient/patient.service';
 import { PatientEntity } from './entities/patient.entity';
 import { AppController } from './app.controller';
+import { PrescriptionsController } from './prescriptions/prescriptions/prescriptions.controller';
+import { PrescriptionsService } from './prescriptions/prescriptions/prescriptions.service';
+import { PrescriptionEntity } from './entities/prescriptions.entity';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -13,8 +16,8 @@ import { AppController } from './app.controller';
     load: [dbConfig]
   }), TypeOrmModule.forRootAsync({
     useFactory: dbConfig,
-  }), TypeOrmModule.forFeature([PatientEntity])],
-  controllers: [AppController, PatientController],
-  providers: [PatientService],
+  }), TypeOrmModule.forFeature([PatientEntity,PrescriptionEntity])],
+  controllers: [AppController, PatientController, PrescriptionsController],
+  providers: [PatientService, PrescriptionsService],
 })
 export class AppModule {}

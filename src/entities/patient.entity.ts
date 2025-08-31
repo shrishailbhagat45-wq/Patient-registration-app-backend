@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { PrescriptionEntity } from "./prescriptions.entity";
 
 export enum Gender {
     Male = 'Male',
@@ -9,9 +10,9 @@ export enum Gender {
 @Entity('patients')
 export class PatientEntity {
   // Define properties and methods for the Patient entity here
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: number;
-    @Column()
+    @Column( )
     name: string;
     @Column()
     gender: Gender;
@@ -21,6 +22,14 @@ export class PatientEntity {
     phoneNumber: string;
     @Column()
     weight: number;
+    @OneToMany(() => PrescriptionEntity, prescription => prescription.patient)
+    prescriptions:PrescriptionEntity[];
+    @CreateDateColumn()
+    createdAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
+    @DeleteDateColumn()
+    deletedAt: Date;
 
 }   
 
