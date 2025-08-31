@@ -12,4 +12,9 @@ export class PrescriptionsController {
 
         return data;
     }
+    @Get('/:id')
+    getPrescriptions(@Param('id') id) {
+        const data=this.prescriptionsService.getPrescriptionsById(id);
+        return data;
+    }
 }

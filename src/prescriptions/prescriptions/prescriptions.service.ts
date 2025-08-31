@@ -28,4 +28,25 @@ export class PrescriptionsService {
         }
         return { status: 201, message: 'Prescription created successfully', data: PrescriptionData,error: null };
     }
+
+    async getPrescriptionsById(id) {
+        const data = await this.prescriptionRepository.find({
+            where: { patient: { id } },
+            relations: ['patient'],
+        }); 
+        if (data.length === 0) {
+            return {
+                status: 404,
+                message: 'No prescriptions found for this patient', 
+                data: [],
+                error: null
+            };
+        }   
+        return {
+            status: 200,
+            message: 'Prescriptions retrieved successfully',
+            data: data, 
+            error: null
+        };
+    }
 }
