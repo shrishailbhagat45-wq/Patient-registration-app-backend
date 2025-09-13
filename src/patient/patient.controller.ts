@@ -1,8 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { PatientDto } from 'src/dto/patient.dto';
 import { PatientService } from './patient.service';
-import { PatientEntity } from 'src/entities/patient.entity';    
-import { get } from 'http';
 
 @Controller('patient')
 export class PatientController {

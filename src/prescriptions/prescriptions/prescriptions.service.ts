@@ -1,28 +1,30 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Model } from 'mongoose';
 import { PrescriptionDto } from 'src/dto/prescription.dto';
-import { PatientEntity } from 'src/entities/patient.entity';
-import { PrescriptionEntity } from 'src/entities/prescriptions.entity';
-import { Repository } from 'typeorm';
+import { Patient } from 'src/schema/patient.schema';
+import { Prescription } from 'src/schema/prescriptions.schema';
+
 @Injectable()
 export class PrescriptionsService {
-    constructor(@InjectRepository(PrescriptionEntity) private prescriptionRepository:Repository<PrescriptionEntity>,@InjectRepository(PatientEntity) private patientsRepository: Repository<PatientEntity>,) {}
+    constructor(@InjectModel('Prescription') private prescriptionModel:Model<Prescription>,@InjectModel('Patient') private patientsModel: Model<Patient>,) {}
     
     async createPrescription(id,PrescriptionData: PrescriptionDto) {
 
-        const patient = await this.patientsRepository.findOne({
+        const patient = await this.patientsModel.findOne({
       where: { id },
     });
         if (!patient) {
       throw new NotFoundException('Patient not found');
     }
 
-    const prescription = this.prescriptionRepository.create({
+    const prescription = this.prescriptionModel.create({
       ...PrescriptionData,
       patient,
     });
 
-        const data= await this.prescriptionRepository.save(prescription);
+        const data= await this.prescriptionModel.create(prescription);
         if(!data) {
             return {status: 400,message: 'Prescription Failed to create', error: 'Failed to create prescription'}
         }
@@ -30,7 +32,7 @@ export class PrescriptionsService {
     }
 
     async getPrescriptionsById(id) {
-        const data = await this.prescriptionRepository.find({
+        const data = await this.prescriptionModel.find({
             where: { patient: { id } },
             relations: ['patient'],
         }); 

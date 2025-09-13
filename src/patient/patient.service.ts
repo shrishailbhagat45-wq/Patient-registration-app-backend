@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { PatientDto } from 'src/dto/patient.dto';
-import { PatientEntity } from 'src/entities/patient.entity';
-import { Like, Repository } from 'typeorm';
+import { Patient } from 'src/schema/patient.schema';
 
 
 @Injectable()
 export class PatientService {
-    constructor(@InjectRepository(PatientEntity) private patientRepository: Repository<PatientEntity>) {
+    constructor(@InjectModel('Patient') private patientModel:Model<Patient>) {
         // Initialization logic if needed
         console.log('PatientService initialized');
     }
@@ -15,7 +15,7 @@ export class PatientService {
     async createPatient(patientData: PatientDto): Promise<any> {
         // Logic to create a new patient
         try {
-            const data=await this.patientRepository.save(patientData);
+            const data=await this.patientModel.create(patientData);
             if(!data) {
                 return {status: HttpStatus.BAD_REQUEST,message: 'Patient Failed to create', error: 'Failed to create patient'}
             }
@@ -27,9 +27,9 @@ export class PatientService {
     async getPatient(search) {
         console.log('Searching for patients with name:', search.name);
         try {
-            const data = await this.patientRepository.find({
-                where: { name: Like(`%${search.name}%`) }
-            });
+            const data = await this.patientModel.find({
+                        name: { $regex: search.name, $options: 'i' }
+                        });
             console.log('Data retrieved from database:', data);
             if (data.length === 0) {
                 return {
@@ -54,7 +54,7 @@ export class PatientService {
     }
     async getSinglePatient(id: number): Promise<any> {
         try {
-            const data = await this.patientRepository.findOne({ where: { id } });
+            const data = await this.patientModel.findById(id);
             if (!data) {
                 return {
                     status: HttpStatus.NOT_FOUND,

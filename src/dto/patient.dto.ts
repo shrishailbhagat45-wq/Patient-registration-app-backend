@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsEnum, IsNumber } from 'class-validator';
 
-import { Gender } from '../entities/patient.entity';
+import { Gender } from '../schema/patient.schema';
 
 export class PatientDto{
 
