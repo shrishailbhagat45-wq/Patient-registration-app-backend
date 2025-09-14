@@ -6,10 +6,9 @@ import { PrescriptionsService } from './prescriptions.service';
 export class PrescriptionsController {
     constructor(private readonly prescriptionsService: PrescriptionsService) {}
 
-    @Post('/add')
+    @Post('/add/:id')
     addPrescription(@Param('id') id,@Body() PrescriptionData) {
         const data=this.prescriptionsService.createPrescription(id,PrescriptionData);
-
         return data;
     }
     @Get('/:id')

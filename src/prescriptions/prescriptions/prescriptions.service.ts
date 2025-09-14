@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { PrescriptionDto } from 'src/dto/prescription.dto';
 import { Patient } from 'src/schema/patient.schema';
 import { Prescription } from 'src/schema/prescriptions.schema';
@@ -14,31 +14,27 @@ export class PrescriptionsService {
     }
     
     async createPrescription(id,PrescriptionData: PrescriptionDto) {
-
-        const patient = await this.patientsModel.findOne({
-      where: { id },
-    });
+        try {
+        const patient = await this.patientsModel.findById(id);
         if (!patient) {
-      throw new NotFoundException('Patient not found');
-    }
-
-    const prescription = this.prescriptionModel.create({
-      ...PrescriptionData,
-      patient,
-    });
-
-        const data= await this.prescriptionModel.create(prescription);
+            throw new NotFoundException('Patient not found');
+        }
+        const prescription = { ...PrescriptionData, patient: patient._id };
+        const data = await this.prescriptionModel.create(prescription);
         if(!data) {
             return {status: 400,message: 'Prescription Failed to create', error: 'Failed to create prescription'}
         }
         return { status: 201, message: 'Prescription created successfully', data: PrescriptionData,error: null };
+    } catch (error) {
+        throw new NotFoundException('Patient not found or prescription creation failed');
+    }
+        
     }
 
-    async getPrescriptionsById(id) {
+    async getPrescriptionsById(id:string) {
         const data = await this.prescriptionModel.find({
-            where: { patient: { id } },
-            relations: ['patient'],
-        }); 
+        patient: new Types.ObjectId(id), // 🔑 convert string to ObjectId
+        }).exec();
         if (data.length === 0) {
             return {
                 status: 404,
