@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Prescription } from './prescriptions.schema';
+
 
 export type PatientDocument = Patient & Document;
 
@@ -26,6 +26,9 @@ export class Patient {
 
   @Prop({ required: true })
   weight: number;
+
+  @Prop({ default: false })
+  delete_status?: boolean;
 
   @Prop({ type: Date, default: null })
   deletedAt?: Date;

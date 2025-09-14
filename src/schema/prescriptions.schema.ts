@@ -3,8 +3,7 @@ import { Document, Types } from 'mongoose';
 
 export type PrescriptionDocument = Prescription & Document;
 
-@Schema({ timestamps: true }) 
-export class Prescription {
+class Drug {
   @Prop({ required: true })
   name: string;
 
@@ -16,6 +15,12 @@ export class Prescription {
 
   @Prop({ required: true })
   frequency: string;
+}
+
+@Schema({ timestamps: true }) 
+export class Prescription {
+  @Prop({ type: [Drug], required: true })
+  drug: Drug[];
 
   @Prop()
   remarks?: string;
@@ -23,17 +28,11 @@ export class Prescription {
   @Prop({ type: Types.ObjectId, ref: 'Patient', required: true })
   patient: Types.ObjectId;
 
+  @Prop({ default: false })
+  delete_status?: boolean;
+
   @Prop({ type: Date, default: null })
   deletedAt?: Date;
 }
 
 export const PrescriptionSchema = SchemaFactory.createForClass(Prescription);
-
-// // Virtual for id
-// PrescriptionSchema.virtual('id').get(function (this: PrescriptionDocument) {
-//   return this._id.toHexString();
-// });
-
-// PrescriptionSchema.set('toJSON', {
-//   virtuals: true,
-// });

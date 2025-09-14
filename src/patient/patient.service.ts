@@ -30,7 +30,6 @@ export class PatientService {
             const data = await this.patientModel.find({
                         name: { $regex: search.name, $options: 'i' }
                         });
-            console.log('Data retrieved from database:', data);
             if (data.length === 0) {
                 return {
                     status: HttpStatus.NOT_FOUND,

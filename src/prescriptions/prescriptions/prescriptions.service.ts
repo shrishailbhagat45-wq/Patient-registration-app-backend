@@ -8,7 +8,10 @@ import { Prescription } from 'src/schema/prescriptions.schema';
 
 @Injectable()
 export class PrescriptionsService {
-    constructor(@InjectModel('Prescription') private prescriptionModel:Model<Prescription>,@InjectModel('Patient') private patientsModel: Model<Patient>,) {}
+    constructor(@InjectModel('Prescription') private prescriptionModel:Model<Prescription>,@InjectModel('Patient') private patientsModel: Model<Patient>,) {
+        // Initialization logic if needed
+        console.log('PrescriptionService initialized');
+    }
     
     async createPrescription(id,PrescriptionData: PrescriptionDto) {
 
