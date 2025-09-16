@@ -8,14 +8,11 @@ export class PatientController {
 
     @Post('create')
     async createPatient(@Body() patientData): Promise<any> {
-        console.log('Creating patient with data:', patientData);
         const response=await this.patientService.createPatient(patientData);
-        console.log('Patient created successfully:', response);
         return response;
     }
     @Post('getPatient')
     async getPatients(@Body()name): Promise<any> {
-        console.log(name);
         const response = await this.patientService.getPatient(name);
         return response;
     }

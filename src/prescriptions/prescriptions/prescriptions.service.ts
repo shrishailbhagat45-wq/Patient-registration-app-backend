@@ -19,7 +19,7 @@ export class PrescriptionsService {
         if (!patient) {
             throw new NotFoundException('Patient not found');
         }
-        const prescription = { ...PrescriptionData, patient: patient._id };
+        const prescription = { ...PrescriptionData, patient: patient._id, patientName: patient.name };
         const data = await this.prescriptionModel.create(prescription);
         if(!data) {
             return {status: 400,message: 'Prescription Failed to create', error: 'Failed to create prescription'}

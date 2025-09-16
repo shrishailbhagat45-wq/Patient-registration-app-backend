@@ -8,6 +8,7 @@ export class PrescriptionsController {
 
     @Post('/add/:id')
     addPrescription(@Param('id') id,@Body() PrescriptionData) {
+        console.log("PrescriptionData",PrescriptionData);
         const data=this.prescriptionsService.createPrescription(id,PrescriptionData);
         return data;
     }

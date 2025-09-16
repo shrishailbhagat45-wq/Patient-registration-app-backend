@@ -28,6 +28,9 @@ export class Prescription {
   @Prop({ type: Types.ObjectId, ref: 'Patient', required: true })
   patient: Types.ObjectId;
 
+  @Prop({ required: true })
+  patientName: string;
+
   @Prop({ default: false })
   delete_status?: boolean;
 
