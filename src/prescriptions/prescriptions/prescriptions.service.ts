@@ -28,13 +28,15 @@ export class PrescriptionsService {
     } catch (error) {
         throw new NotFoundException('Patient not found or prescription creation failed');
     }
-        
     }
 
     async getPrescriptionsById(id:string) {
         const data = await this.prescriptionModel.find({
-        patient: new Types.ObjectId(id), // 🔑 convert string to ObjectId
-        }).exec();
+        patient: new Types.ObjectId(id),
+    })
+    .sort({ createdAt: -1 }) //sort by newest
+    .limit(3)                //get only 5 results
+    .exec();
         if (data.length === 0) {
             return {
                 status: 404,
