@@ -18,10 +18,10 @@ export class Patient {
   @Prop({ type: String, enum: Gender, required: true })
   gender: Gender;
 
-  @Prop({ required: true })
+  @Prop({ required: true})
   age: number;
 
-  @Prop({ required: true })
+  @Prop({ required: true,unique: true  })
   phoneNumber: string;
 
   @Prop({ required: true })
