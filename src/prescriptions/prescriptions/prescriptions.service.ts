@@ -30,7 +30,7 @@ export class PrescriptionsService {
     }
     }
 
-    async getPrescriptionsById(id:string) {
+    async getPrescriptionsByPatientId(id:string) {
         const data = await this.prescriptionModel.find({
         patient: new Types.ObjectId(id),
     })
@@ -49,6 +49,24 @@ export class PrescriptionsService {
             status: 200,
             message: 'Prescriptions retrieved successfully',
             data: data, 
+            error: null
+        };
+    }
+
+    async getPrescriptionsById(id: string) {
+        const data = await this.prescriptionModel.findById(id);
+        if (!data) {
+            return {
+                status: 404,
+                message: 'Prescription not found',
+                data: null,
+                error: 'Not Found'
+            };
+        }
+        return {
+            status: 200,
+            message: 'Prescription retrieved successfully',
+            data: data,
             error: null
         };
     }

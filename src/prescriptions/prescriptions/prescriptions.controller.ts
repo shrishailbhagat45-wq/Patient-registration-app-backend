@@ -7,14 +7,21 @@ export class PrescriptionsController {
     constructor(private readonly prescriptionsService: PrescriptionsService) {}
 
     @Post('/add/:id')
-    addPrescription(@Param('id') id,@Body() PrescriptionData) {
+    async addPrescription(@Param('id') id,@Body() PrescriptionData) {
         console.log("PrescriptionData",PrescriptionData);
-        const data=this.prescriptionsService.createPrescription(id,PrescriptionData);
+        const data=await this.prescriptionsService.createPrescription(id,PrescriptionData);
         return data;
     }
+    @Get('/patient/:id')
+    async getPrescriptionsByPatientId(@Param('id') id) {
+        const data=await this.prescriptionsService.getPrescriptionsByPatientId(id);
+        console.log("data",data);
+        return data;
+    }
+
     @Get('/:id')
-    getPrescriptions(@Param('id') id) {
-        const data=this.prescriptionsService.getPrescriptionsById(id);
+    async getPrescriptionById(@Param('id') id) {
+        const data=await this.prescriptionsService.getPrescriptionsById(id);
         return data;
-    }
+    }   
 }

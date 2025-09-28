@@ -25,6 +25,7 @@ export class Prescription {
   @Prop()
   remarks?: string;
 
+  
   @Prop({ type: Types.ObjectId, ref: 'Patient', required: true })
   patient: Types.ObjectId;
 
