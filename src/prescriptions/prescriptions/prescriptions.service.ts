@@ -21,10 +21,11 @@ export class PrescriptionsService {
         }
         const prescription = { ...PrescriptionData, patient: patient._id, patientName: patient.name };
         const data = await this.prescriptionModel.create(prescription);
+        const sendData = { ...prescription,createdAt:new Date() ,patientData: patient ? patient.toObject() : null };
         if(!data) {
             return {status: 400,message: 'Prescription Failed to create', error: 'Failed to create prescription'}
         }
-        return { status: 201, message: 'Prescription created successfully', data: PrescriptionData,error: null };
+        return { status: 201, message: 'Prescription created successfully', data: sendData,error: null };
     } catch (error) {
         throw new NotFoundException('Patient not found or prescription creation failed');
     }
@@ -53,7 +54,7 @@ export class PrescriptionsService {
         };
     }
 
-    async getPrescriptionsById(id: string) {
+    async getPrescriptionsByIdWithPatientData(id: string) {
         const data = await this.prescriptionModel.findById(id);
         if (!data) {
             return {
@@ -63,11 +64,19 @@ export class PrescriptionsService {
                 error: 'Not Found'
             };
         }
-        return {
+        else{
+            const patientData = await this.patientsModel.findById(data.patient);
+            const result = {
+                ...data.toObject(),
+                patientData: patientData ? patientData.toObject() : null,
+            };
+            return {
             status: 200,
             message: 'Prescription retrieved successfully',
-            data: data,
+            data: result,
             error: null
         };
+        }
+        
     }
 }

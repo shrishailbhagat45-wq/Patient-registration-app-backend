@@ -20,8 +20,8 @@ export class PrescriptionsController {
     }
 
     @Get('/:id')
-    async getPrescriptionById(@Param('id') id) {
-        const data=await this.prescriptionsService.getPrescriptionsById(id);
+    async getPrescriptionByIdWithPatientData(@Param('id') id) {
+        const data=await this.prescriptionsService.getPrescriptionsByIdWithPatientData(id);
         return data;
     }   
 }
