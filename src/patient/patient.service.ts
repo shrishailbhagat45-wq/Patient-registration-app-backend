@@ -15,17 +15,24 @@ export class PatientService {
     async createPatient(patientData: PatientDto): Promise<any> {
         // Logic to create a new patient
         try {
+            const checkPhoneNumberIsPresent = await this.patientModel.findOne({ phoneNumber: patientData.phoneNumber });
+            if(checkPhoneNumberIsPresent) {
+                return {status: HttpStatus.CONFLICT,message: 'Phone number already exists', error: ' Phone number already in use'}
+            }   
+
             const data=await this.patientModel.create(patientData);
+            
             if(!data) {
                 return {status: HttpStatus.BAD_REQUEST,message: 'Patient Failed to create', error: 'Failed to create patient'}
             }
-            return { status: HttpStatus.CREATED, message: 'Patient created successfully', data: patientData,error: null };
+            console.log('Patient created successfully:', data);
+            return { status: HttpStatus.CREATED, message: 'Patient created successfully', data: data, error: null };
         }catch (error) {
             throw new HttpException({status: HttpStatus.INTERNAL_SERVER_ERROR,error: 'Something went wrong'}, HttpStatus.INTERNAL_SERVER_ERROR, {cause: error});
         }
     }
     async getPatient(search) {
-        console.log('Searching for patients with name:', search.name);
+        
         try {
             const data = await this.patientModel.find({
                         name: { $regex: search.name, $options: 'i' }
@@ -38,6 +45,7 @@ export class PatientService {
                     error: null
                 };
             }
+            console.log('Searching for patients with name:', data);
             return {
                 status: HttpStatus.OK,
                 message: 'Patients retrieved successfully',
@@ -61,7 +69,9 @@ export class PatientService {
                     data: null,
                     error: 'No patient found with the given ID'
                 };
-            }       
+            }      
+            console.log('Retrieving patient with ID:', data);
+             
             return {
                 status: HttpStatus.OK,
                 message: 'Patient retrieved successfully',

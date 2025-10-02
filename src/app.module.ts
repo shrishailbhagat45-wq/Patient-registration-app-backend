@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
 import { PatientController } from './patient/patient.controller';
 import { PatientService } from './patient/patient.service';
-import { Patient, PatientSchema } from './schema/patient.schema';
+import { PatientSchema } from './schema/patient.schema';
 import { AppController } from './app.controller';
 import { PrescriptionsController } from './prescriptions/prescriptions/prescriptions.controller';
 import { PrescriptionsService } from './prescriptions/prescriptions/prescriptions.service';
-import { Prescription, PrescriptionSchema } from './schema/prescriptions.schema';
+import { PrescriptionSchema } from './schema/prescriptions.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+import { UserSchema } from './schema/user.schema';
 
 @Module({
   imports: [
@@ -20,10 +23,12 @@ import { ConfigModule } from '@nestjs/config';
     ),
     MongooseModule.forFeature([
       { name: 'Patient', schema: PatientSchema },
-      { name: 'Prescription', schema: PrescriptionSchema }
+      { name: 'Prescription', schema: PrescriptionSchema },
+       { name: 'User', schema: UserSchema } 
+     
     ])
   ],
-  controllers: [AppController, PatientController, PrescriptionsController],
-  providers: [PatientService, PrescriptionsService],
+  controllers: [AppController, PatientController, PrescriptionsController, UserController],
+  providers: [PatientService, PrescriptionsService, UserService],
 })
 export class AppModule {}
