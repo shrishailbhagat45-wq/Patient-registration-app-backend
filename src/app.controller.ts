@@ -6,6 +6,7 @@ export class AppController {
 
     @Get()
   getHello(): object {
+    console.log("Hello endpoint hit");
     return {"message": "Welcome to the Patient Registration API", "status": 200};
   }
 }
