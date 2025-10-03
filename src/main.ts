@@ -6,7 +6,7 @@ import * as express from 'express';
 
 const server = express();
 
-async function bootstrap() {
+export const createNestApp = async () => {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
   app.enableCors({
@@ -18,6 +18,6 @@ async function bootstrap() {
   await app.init();
 }
 
-bootstrap();
+// createNestApp();
 
 export default server;
