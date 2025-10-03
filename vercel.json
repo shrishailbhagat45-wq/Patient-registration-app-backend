@@ -12,7 +12,7 @@
       "dest": "dist/main.js",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
       "headers": {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": ["https://frontend-for-patient-registration-a.vercel.app", "http://localhost:5173"]
       },
       "status": 200
     }
