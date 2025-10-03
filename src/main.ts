@@ -18,6 +18,6 @@ export const createNestApp = async () => {
   await app.init();
 }
 
-// createNestApp();
+createNestApp();
 
 export default server;
