@@ -11,6 +11,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { UserSchema } from './schema/user.schema';
+import { BillingController } from './billing/billing.controller';
+import { BillingService } from './billing/billing.service';
+import { BillingItemSchema } from './schema/billingItem.schema';
 
 @Module({
   imports: [
@@ -24,11 +27,12 @@ import { UserSchema } from './schema/user.schema';
     MongooseModule.forFeature([
       { name: 'Patient', schema: PatientSchema },
       { name: 'Prescription', schema: PrescriptionSchema },
-       { name: 'User', schema: UserSchema } 
+      { name: 'User', schema: UserSchema } ,
+      { name: 'BillingItem', schema: BillingItemSchema }
      
     ])
   ],
-  controllers: [AppController, PatientController, PrescriptionsController, UserController],
-  providers: [PatientService, PrescriptionsService, UserService],
+  controllers: [AppController, PatientController, PrescriptionsController, UserController, BillingController],
+  providers: [PatientService, PrescriptionsService, UserService, BillingService],
 })
 export class AppModule {}
