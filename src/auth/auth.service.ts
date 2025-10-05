@@ -8,7 +8,7 @@ import { AuthJwtPayload } from './type/auth-jwtPayload';
 export class AuthService {
     constructor(private userService:UserService,private JwtService:JwtService){}
     async validateUser(email:string,password:string){
-        
+        console.log(email,password)
         const user=await this.userService.findUserByEmail(email)
         if(!user){
             console.log("not user")
