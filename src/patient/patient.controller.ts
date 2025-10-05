@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { PatientDto } from 'src/dto/patient.dto';
 import { PatientService } from './patient.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 
 @Controller('patient')
 export class PatientController {
@@ -12,6 +13,7 @@ export class PatientController {
         const response=await this.patientService.createPatient(patientData);
         return response;
     }
+    
     @Post('getPatient')
     async getPatients(@Body()name:string): Promise<any> {
         const response = await this.patientService.getPatient(name);
