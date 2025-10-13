@@ -15,6 +15,9 @@ import { BillingController } from './billing/billing.controller';
 import { BillingService } from './billing/billing.service';
 import { BillingItemSchema } from './schema/billingItem.schema';
 import { AuthModule } from './auth/auth.module';
+import { PatientBillingController } from './patient-billing/patient-billing.controller';
+import { PatientBillingService } from './patient-billing/patient-billing.service';
+import { PatientBillSchema } from './schema/patientBill.schema';
 
 @Module({
   imports: [
@@ -29,12 +32,13 @@ import { AuthModule } from './auth/auth.module';
       { name: 'Patient', schema: PatientSchema },
       { name: 'Prescription', schema: PrescriptionSchema },
       { name: 'User', schema: UserSchema } ,
-      { name: 'BillingItem', schema: BillingItemSchema }
+      { name: 'BillingItem', schema: BillingItemSchema },
+      {name: 'PatientBill', schema: PatientBillSchema}
      
     ]),
     AuthModule
   ],
-  controllers: [AppController, PatientController, PrescriptionsController, UserController, BillingController],
-  providers: [PatientService, PrescriptionsService, UserService, BillingService],
+  controllers: [AppController, PatientController, PrescriptionsController, UserController, BillingController, PatientBillingController],
+  providers: [PatientService, PrescriptionsService, UserService, BillingService, PatientBillingService],
 })
 export class AppModule {}

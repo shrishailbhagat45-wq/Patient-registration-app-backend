@@ -21,7 +21,7 @@ export class Patient {
   @Prop({ required: true})
   age: number;
 
-  @Prop({ required: true,unique: true  })
+  @Prop({ required: true,unique: true,index: true  })
   phoneNumber: string;
 
   @Prop({ required: true })

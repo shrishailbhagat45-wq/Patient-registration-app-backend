@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Patient } from './patient.schema';
 
 export type PrescriptionDocument = Prescription & Document;
 
@@ -26,7 +27,7 @@ export class Prescription {
   remarks?: string;
 
   
-  @Prop({ type: Types.ObjectId, ref: 'Patient', required: true })
+  @Prop({ type: Types.ObjectId, required: true,ref:Patient.name,trim: true ,index: true })
   patient: Types.ObjectId;
 
   @Prop({ required: true })
