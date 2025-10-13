@@ -6,7 +6,7 @@ import { Roles } from 'src/auth/decorators/Role.decorator';
 import { Role } from 'src/schema/user.schema';
 import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('patient')
 export class PatientController {
     constructor(private readonly patientService: PatientService) {}
@@ -23,8 +23,8 @@ export class PatientController {
         const response = await this.patientService.getPatient(name);
         return response;
     }
-    // @Roles([Role.ADMIN,Role.DOCTOR])
-    // @UseGuards(RolesGuard)
+    @Roles([Role.ADMIN,Role.DOCTOR])
+    @UseGuards(RolesGuard)
     @Get('/:id')
     async getSinglePatient(@Param('id') id: number): Promise<any> {
         const response = await this.patientService.getSinglePatient(id);
