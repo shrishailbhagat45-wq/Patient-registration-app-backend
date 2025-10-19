@@ -4,9 +4,10 @@ import { Document } from 'mongoose';
 export type UserDocument = User & Document;
 
 export enum Role{
-    DOCTOR='doctor', 
-    RECEPTIONIST='receptionist',
-    ADMIN='admin'
+    DOCTOR='Doctor', 
+    RECEPTIONIST='Receptionist',
+    MANAGER='Manager',
+    ADMIN='Admin'
 }
 
 @Schema({ timestamps: true })
@@ -22,6 +23,12 @@ export class User {
 
     @Prop({ required: true, enum: Role })
     role: Role;
+
+    @Prop({ required: false })
+    doctorId?: string;
+
+    @Prop({required: false})
+    specialization?: string;
 
     @Prop({ default: false })
     delete_status?: boolean;

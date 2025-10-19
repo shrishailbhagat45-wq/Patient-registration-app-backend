@@ -1,0 +1,24 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
+
+export type PatientDocument = PatientQueue & Document;
+
+@Schema({ timestamps: true, autoIndex: true })
+export class PatientQueue {
+    @Prop({ required: true, trim: true })
+    name: string;       
+    @Prop({ required: true, trim: true })
+    phoneNumber: string;
+}
+
+const PatientQueueSchema=SchemaFactory.createForClass(PatientQueue);
+
+// TTL index: remove documents 1 day (86400 seconds) after createdAt
+PatientQueueSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 });
+
+// Compound index on mobile and name
+PatientQueueSchema.index({ mobile: 1, name: 1 });
+
+
+
+export default PatientQueueSchema;

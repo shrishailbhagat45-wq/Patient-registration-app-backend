@@ -7,8 +7,9 @@ export class PatientBillingController {
   constructor(private readonly patientBillService: PatientBillingService) {}
 
   @Post()
-  create(@Body() createDto: CreatePatientBillDto) {
-    return this.patientBillService.create(createDto);
+  create(@Body() createBillDto) {
+    console.log("createDto",createBillDto);
+    return this.patientBillService.create(createBillDto.billData);
   }
 
   @Get()

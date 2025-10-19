@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Model, Types } from 'mongoose';
 import { PrescriptionDto } from 'src/dto/prescription.dto';
 import { Patient } from 'src/schema/patient.schema';

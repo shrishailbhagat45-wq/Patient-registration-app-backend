@@ -10,10 +10,13 @@ export enum Gender {
   Other = 'Other'
 }
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true , autoIndex: true })
 export class Patient {
-  @Prop({ required: true })
+  @Prop({ required: true, index: true, trim: true })
   name: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true, index: true })
+  userId: Types.ObjectId;
 
   @Prop({ type: String, enum: Gender, required: true })
   gender: Gender;
@@ -32,9 +35,14 @@ export class Patient {
 
   @Prop({ type: Date, default: null })
   deletedAt?: Date;
+  
 }
 
-export const PatientSchema = SchemaFactory.createForClass(Patient);
+const PatientSchema = SchemaFactory.createForClass(Patient);
+
+PatientSchema.index({ name:1, userId:1 }, { unique: true });
+
+export {PatientSchema};
 
 
 

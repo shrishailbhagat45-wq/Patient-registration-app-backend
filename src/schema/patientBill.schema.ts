@@ -11,18 +11,32 @@ class BillItem {
 
   @Prop({ required: true, default: 1 })
   quantity: number;
+
+  @Prop({ required: true })
+  price: number;
 }
 
 @Schema({ timestamps: true })
 export class PatientBill {
-  @Prop({ required: true, type: Types.ObjectId, ref:Patient.name,trim: true, index: true })
-  patient: Types.ObjectId;
+  @Prop({ required: true, type: Types.ObjectId, ref: Patient.name , index: true })
+  patientId: Types.ObjectId;
 
   @Prop({ type: [BillItem], default: [] })
   items: BillItem[];
 
+  @Prop({ required: false, default: 0 })
+  taxPercent: number;
+
+  @Prop({ required: false, default: 0 })
+  taxAmount: number;
+
+  @Prop({ required: false, default: '' })
+  billNotes: string;
+
   @Prop({ required: true })
   totalAmount: number;
+
+  
 }
 
 export const PatientBillSchema = SchemaFactory.createForClass(PatientBill);

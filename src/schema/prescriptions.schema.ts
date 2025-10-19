@@ -5,7 +5,7 @@ import { Patient } from './patient.schema';
 export type PrescriptionDocument = Prescription & Document;
 
 class Drug {
-  @Prop({ required: true })
+  @Prop({ required: true  })
   name: string;
 
   @Prop({ required: true })
@@ -18,7 +18,7 @@ class Drug {
   frequency: string;
 }
 
-@Schema({ timestamps: true }) 
+@Schema({ timestamps: true, autoIndex: true }) 
 export class Prescription {
   @Prop({ type: [Drug], required: true })
   drug: Drug[];

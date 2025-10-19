@@ -2,13 +2,22 @@ import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePatientBillDto {
   @IsString()
-  @IsNotEmpty()
-  patient: string;
+  patientId: string;
 
   @IsArray()
-  items: { item: string; quantity: number }[];
+  items: { item: string; quantity: number, price:number}[];
 
   @IsNumber()
-  @IsNotEmpty()
-  totalAmount: number; // can also calculate in service
+  taxPercent: number;
+
+  @IsString()
+  billNotes: string;
+
+  @IsNumber()
+  taxAmount: number;
+
+  @IsNumber()
+  totalAmount: number; 
+
+
 }
