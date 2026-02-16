@@ -41,4 +41,13 @@ export class UserService {
         })
         return user
     }
+
+    addReceptionist(receptionistData: any) {
+        const newReceptionist = new this.userModel(receptionistData);
+        return newReceptionist.save();
+    }
+    
+    getReceptionistsByDoctorId(doctorId: string) {
+        return this.userModel.find({ role: 'Receptionist', doctorId: doctorId }).exec();
+    }
 }

@@ -16,6 +16,9 @@ class Drug {
 
   @Prop({ required: true })
   frequency: string;
+
+  @Prop({ required: true })
+  remarks?: string;
 }
 
 @Schema({ timestamps: true, autoIndex: true }) 
@@ -24,7 +27,7 @@ export class Prescription {
   drug: Drug[];
 
   @Prop()
-  remarks?: string;
+  Diagnosis?: string;
 
   
   @Prop({ type: Types.ObjectId, required: true,ref:Patient.name,trim: true ,index: true })

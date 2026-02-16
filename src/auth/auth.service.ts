@@ -19,7 +19,7 @@ export class AuthService {
             throw new UnauthorizedException("Invalid credential")
         }
 
-        return{id:user._id};    
+        return{id:user._id,doctorId:user.doctorId,role:user.role};    
     }
 
     login(userId:number){
@@ -32,7 +32,7 @@ export class AuthService {
         if(!user){
             throw new UnauthorizedException("user not found")
         }
-        const currentUser={id:user._id,role:user.role}
+        const currentUser={id:user._id,role:user.role,doctorId:user.doctorId}
         return currentUser
     }
 }
