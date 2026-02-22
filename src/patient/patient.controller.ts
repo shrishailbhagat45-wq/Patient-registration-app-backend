@@ -5,7 +5,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/Role.decorator';
 import { Role } from 'src/schema/user.schema';
 import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
-import { request } from 'http';
 
 @UseGuards(JwtAuthGuard)
 @Controller('patient')
@@ -13,15 +12,14 @@ export class PatientController {
     constructor(private readonly patientService: PatientService) {}
 
     @Post('create')
-    async createPatient(@Body() patientData:PatientDto): Promise<any> {
+    async createPatient(@Body() patientData: PatientDto): Promise<any> {
         console.log('Received patient data:', patientData);
-        const response=await this.patientService.createPatient(patientData);
+        const response = await this.patientService.createPatient(patientData);
         return response;
     }
     
     @Post('getPatient')
-    async getPatients(@Body()name:string ,request): Promise<any> {
-        console.log('Received patient name:', name);
+    async getPatients(@Body() name: string): Promise<any> {
         const response = await this.patientService.getPatient(name);
         return response;
     }

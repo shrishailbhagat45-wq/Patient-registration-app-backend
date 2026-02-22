@@ -11,32 +11,66 @@ export class PatientService {
         // Initialization logic if needed
         console.log('PatientService initialized');
     }
-    // Define methods for handling patient-related operations here
     async createPatient(patientData: PatientDto): Promise<any> {
         // Logic to create a new patient
         try {
-            const checkPhoneNumberIsPresent = await this.patientModel.findOne({ phoneNumber: patientData.phoneNumber });
-            if(checkPhoneNumberIsPresent) {
-                return {status: HttpStatus.CONFLICT,message: 'Phone number already exists', error: ' Phone number already in use'}
-            }   
+            const checkPhoneNumberIsPresent = await this.patientModel.findOne({ 
+                phoneNumber: patientData.phoneNumber,
+                doctorId: patientData.doctorId
+            });
+            console.log('Check phone number presence:', checkPhoneNumberIsPresent);
 
-            const data=await this.patientModel.create(patientData);
-            
-            if(!data) {
-                return {status: HttpStatus.BAD_REQUEST,message: 'Patient Failed to create', error: 'Failed to create patient'}
+            if (checkPhoneNumberIsPresent) {
+                return {
+                    status: HttpStatus.CONFLICT,
+                    message: 'Phone number already exists for this doctor',
+                    error: 'Phone number already in use for this doctor'
+                };
             }
-            console.log('Patient created successfully:', data);
-            return { status: HttpStatus.CREATED, message: 'Patient created successfully', data: data, error: null };
-        }catch (error) {
-            throw new HttpException({status: HttpStatus.INTERNAL_SERVER_ERROR,error: 'Something went wrong'}, HttpStatus.INTERNAL_SERVER_ERROR, {cause: error});
+
+            const newPatient = new this.patientModel(patientData);
+            const data = await newPatient.save();
+
+            if (!data) {
+                return {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: 'Patient Failed to create',
+                    error: 'Failed to create patient'
+                };
+            }
+            return {
+                status: HttpStatus.CREATED,
+                message: 'Patient created successfully',
+                data: data,
+                error: null
+            };
+        } catch (error) {
+            console.error('Error creating patient:', error);
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong'
+            }, HttpStatus.INTERNAL_SERVER_ERROR, { cause: error });
         }
     }
+
     async getPatient(search) {
-        
+
         try {
-            const data = await this.patientModel.find({
-                        name: { $regex: search.name, $options: 'i' }
-                        });
+            const query: any = {};
+            
+            // Add name search if provided
+            if (search.name) {
+                query.name = { $regex: search.name, $options: 'i' };
+            }
+              // Add doctorId filter if provided
+            if (search.doctorId) {
+                query.doctorId = search.doctorId;
+            }
+            
+            const data = await this.patientModel.find(query)
+                .limit(5)
+                .exec();
+            
             if (data.length === 0) {
                 return {
                     status: HttpStatus.NOT_FOUND,
@@ -45,7 +79,6 @@ export class PatientService {
                     error: null
                 };
             }
-            console.log('Searching for patients with name:', data);
             return {
                 status: HttpStatus.OK,
                 message: 'Patients retrieved successfully',
@@ -53,10 +86,11 @@ export class PatientService {
                 error: null
             };
         } catch (error) {
+            console.error('Error retrieving patients:', error);
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: 'Something went wrong'
-            }, HttpStatus.INTERNAL_SERVER_ERROR, { cause: error });
+                error: error.message || 'Something went wrong'
+            }, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async getSinglePatient(id: number): Promise<any> {
@@ -79,10 +113,11 @@ export class PatientService {
                 error: null
             };
         } catch (error) {
+            console.error('Error retrieving patient:', error);
             throw new HttpException({   
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: 'Something went wrong'
-            }, HttpStatus.INTERNAL_SERVER_ERROR, { cause: error });
+                error: error.message || 'Something went wrong'
+            }, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -92,7 +127,7 @@ export class PatientService {
         return `Patient with ID ${id} updated successfully`;
     }
     deletePatient(id: number): string {
-        // Logic to delete a patient`
+        // Logic to delete a patient
         return `Patient with ID ${id} deleted successfully`;
     }
 }

@@ -15,8 +15,8 @@ export class Patient {
   @Prop({ required: true, index: true, trim: true })
   name: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true, index: true })
-  userId: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'doctorId', required: true, index: true })
+  doctorId: Types.ObjectId;
 
   @Prop({ type: String, enum: Gender, required: true })
   gender: Gender;
@@ -24,7 +24,7 @@ export class Patient {
   @Prop({ required: true})
   age: number;
 
-  @Prop({ required: true,unique: true,index: true  })
+  @Prop({ required: true,index: true  })
   phoneNumber: string;
 
   @Prop({ required: true })
@@ -40,9 +40,9 @@ export class Patient {
 
 const PatientSchema = SchemaFactory.createForClass(Patient);
 
-PatientSchema.index({ name:1, userId:1 }, { unique: true });
+PatientSchema.index({ name: 1, doctorId: 1 });
 
-export {PatientSchema};
+export { PatientSchema };
 
 
 

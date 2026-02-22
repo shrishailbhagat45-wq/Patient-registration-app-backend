@@ -1,6 +1,7 @@
 import { IsString, IsOptional, IsEnum, IsNumber } from 'class-validator';
 
 import { Gender } from '../schema/patient.schema';
+import { Types } from 'mongoose';
 
 export class PatientDto{
 
@@ -19,5 +20,7 @@ export class PatientDto{
     @IsNumber()
     weight: number;
 
+    @IsString()
+    doctorId: string;
 
 }
