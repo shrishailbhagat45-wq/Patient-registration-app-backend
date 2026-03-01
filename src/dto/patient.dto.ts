@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsNumber } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNumber, IsDateString } from 'class-validator';
 
 import { Gender } from '../schema/patient.schema';
 import { Types } from 'mongoose';
@@ -11,8 +11,8 @@ export class PatientDto{
     @IsEnum(Gender)
     gender: Gender;
 
-    @IsNumber()
-    age: number;
+    @IsDateString()
+    birthday: Date;
 
     @IsString()
     phoneNumber: string;
