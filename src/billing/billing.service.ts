@@ -22,8 +22,9 @@ export class BillingService {
     return { status: 201, message:"Item is crated",data:data ,error: ""}
   }
 
-  async findAll(): Promise<BillingItem[]> {
-    return this.billingModel.find().exec();
+
+  async findAll(id): Promise<BillingItem[]> {
+    return this.billingModel.find({ doctorId: id }).exec();
   }
 
   async findOne(id: number): Promise<BillingItem> {

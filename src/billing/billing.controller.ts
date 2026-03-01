@@ -12,9 +12,9 @@ export class BillingController {
     return this.billingService.create(createDto);
   }
 
-  @Get()
-  findAll() {
-    return this.billingService.findAll();
+  @Get('/:id')
+  findAll(@Param('id') id: number) {
+    return this.billingService.findAll(id);
   }
 
   @Get('/:id')
