@@ -25,4 +25,14 @@ export class UserController {
         console.log('Fetched receptionists:', data);
         return data;
     }
+    @Get('delete/:id')
+    async deleteUser(@Param('id') id): Promise<any> {
+        const data = await this.userService.deleteUser(id);
+        return data;
+    }
+    @Get('/:id')
+    async getUserById(@Param('id') id): Promise<any> {
+        const data = await this.userService.findOne(id);
+        return data;
+    }
 }

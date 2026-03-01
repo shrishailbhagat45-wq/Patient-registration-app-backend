@@ -18,13 +18,15 @@ export class AuthService {
         if(!isPasswordMatch){
             throw new UnauthorizedException("Invalid credential")
         }
-
+        console.log("user logged in successfully with email",user.email)
         return{id:user._id,doctorId:user.doctorId,role:user.role};    
     }
 
-    login(userId:number){
+    async login(userId:number){
         const payload:AuthJwtPayload={sub:userId}
-        return this.JwtService.sign(payload)
+        const token = this.JwtService.sign(payload)
+        const user=await this.userService.findOne(userId)
+        return {id:user?._id,doctorId:user?.doctorId,role:user?.role,token:token}
     }
 
     async validateJwtUser(userId:number){

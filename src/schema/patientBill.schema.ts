@@ -36,7 +36,9 @@ export class PatientBill {
   @Prop({ required: true })
   totalAmount: number;
 
-  
+  @Prop({ required: true })
+  doctorId: string;
+
 }
 
 export const PatientBillSchema = SchemaFactory.createForClass(PatientBill);

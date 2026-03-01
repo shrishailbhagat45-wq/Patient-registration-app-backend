@@ -10,6 +10,9 @@ export class BillingItem {
 
   @Prop({ required: true })
   price: number;
+
+  @Prop({ required: true })
+  doctorId: string;
   
 }
 

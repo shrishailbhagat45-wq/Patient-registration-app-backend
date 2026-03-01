@@ -23,6 +23,7 @@ export class PatientController {
         const response = await this.patientService.getPatient(name);
         return response;
     }
+    
     @Roles([Role.ADMIN,Role.DOCTOR])
     @UseGuards(RolesGuard)
     @Get('/:id')

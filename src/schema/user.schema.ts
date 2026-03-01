@@ -30,11 +30,17 @@ export class User {
     @Prop({required: false})
     specialization?: string;
 
+    @Prop({ required: false })
+    phoneNumber?: string;
+
     @Prop({ default: false })
     delete_status?: boolean;
 
     @Prop({ type: Date, default: null })
     deletedAt?: Date;
+
+    @Prop({ type: Date, default: null })
+    createdAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
