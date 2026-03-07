@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -33,6 +33,17 @@ export class UserController {
     @Get('/:id')
     async getUserById(@Param('id') id): Promise<any> {
         const data = await this.userService.findOne(id);
+        return data;
+    }
+    @Put('/:id')
+    async updateUser(@Param('id') id, @Body() updateData): Promise<any> {
+        const data = await this.userService.updateUser(id, updateData);
+        return data;
+    }
+
+    @Put('/password/:id')
+    async updatePassword(@Param('id') id, @Body() passwordData): Promise<any> {
+        const data = await this.userService.updatePassword(id, passwordData);
         return data;
     }
 }

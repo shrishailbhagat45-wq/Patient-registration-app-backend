@@ -7,8 +7,8 @@ import { UpdateBillingItemDto } from 'src/dto/update-billing-item.dto';
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}
 
-  @Post()
-  create(@Body() createDto: CreateBillingItemDto) {
+  @Post('/:id')
+  create(@Param('id') id: number, @Body() createDto: CreateBillingItemDto) {
     return this.billingService.create(createDto);
   }
 

@@ -13,12 +13,14 @@ export class BillingService {
     @InjectModel(BillingItem.name) private billingModel: Model<BillingItemDocument>,
   ) {}
 
-  async create(createDto: CreateBillingItemDto) {
-    const existingItem = await this.billingModel.findOne({ name: createDto.name }).exec();
+  async create( createDto: CreateBillingItemDto) {
+    const existingItem = await this.billingModel
+      .findOne({ name: createDto.name, doctorId: createDto.doctorId })
+      .exec();
     if (existingItem) {
         throw new BadRequestException('Billing item failed to create: item already exists');
     }
-    const data =await this.billingModel.create(createDto);
+    const data =await this.billingModel.create({ ...createDto });
     return { status: 201, message:"Item is crated",data:data ,error: ""}
   }
 

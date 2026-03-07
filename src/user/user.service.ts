@@ -68,7 +68,30 @@ export class UserService {
     async getReceptionistsByDoctorId(doctorId: string) {
         return this.userModel.find({ role: 'Receptionist', doctorId: doctorId }).exec();
     }
+    
     deleteUser(id: string) {
         return this.userModel.findByIdAndDelete(id).exec();
+    }
+
+    async updateUser(id: string, updateData: any) {
+        try {
+            const updatedUser = await this.userModel.findByIdAndUpdate(id, { $set: updateData }, { new: true }).exec();
+            return updatedUser;
+        } catch (error) {
+            console.error('Error updating user:', error);
+            throw new Error('User update failed');
+        }
+    }
+
+    async updatePassword(id: string, passwordData: any) {
+        try {
+            const hashedPassword = await bcrypt.hash(passwordData.password, 10);
+            const updatedUser = await this.userModel.findByIdAndUpdate(id, { $set: { password: hashedPassword } }, { new: true }).exec();
+            return updatedUser; 
+        }
+        catch (error) {
+            console.error('Error updating password:', error);
+            throw new Error('Password update failed');
+        }   
     }
 }

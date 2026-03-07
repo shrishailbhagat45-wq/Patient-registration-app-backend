@@ -9,4 +9,8 @@ export class CreateBillingItemDto {
   @IsNotEmpty()
   price: number;
 
+  @IsString()
+  @IsNotEmpty()
+  doctorId: string;
+
 }
