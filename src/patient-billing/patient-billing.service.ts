@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { PatientBill } from 'src/schema/patientBill.schema';
 import { CreatePatientBillDto } from 'src/dto/create-patient-bill.dto';
 import { UpdatePatientBillDto } from 'src/dto/update-patient-bill.dto';
+import { PatientBillingFilterDto } from 'src/dto/patient-billing-filter.dto';
 
 @Injectable()
 export class PatientBillingService {
@@ -40,8 +41,58 @@ export class PatientBillingService {
     }
   }
 
-  async findAll(): Promise<PatientBill[]> {
-    return this.patientBillModel.find().populate('items.item').exec();
+  async findAll(filter: PatientBillingFilterDto): Promise<PatientBill[]> {
+    const query: any = {};
+
+    if (filter?.doctorId) {
+      query.doctorId = filter.doctorId;
+    }
+
+    if (filter?.date) {
+      const inputDate = new Date(filter.date);
+      if (Number.isNaN(inputDate.getTime())) {
+        throw new BadRequestException('date must be a valid date');
+      }
+
+      const startOfDay = new Date(inputDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(inputDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      query.createdAt = {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      };
+    }
+
+    if (filter?.month) {
+      const monthText = filter.month.trim();
+      const yearMonthRegex = /^(\d{4})-(\d{2})$/;
+      const yearMonthMatch = monthText.match(yearMonthRegex);
+
+      if (!yearMonthMatch) {
+        throw new BadRequestException('month must be in format "YYYY-MM" (e.g. "2026-03")');
+      }
+
+      const year = Number(yearMonthMatch[1]);
+      const monthNumber = Number(yearMonthMatch[2]);
+      const monthIndex = monthNumber - 1;
+
+      if (!Number.isInteger(monthNumber) || monthNumber < 1 || monthNumber > 12) {
+        throw new BadRequestException('month must be a valid month between 01 and 12');
+      }
+
+      const startOfMonth = new Date(year, monthIndex, 1, 0, 0, 0, 0);
+      const endOfMonth = new Date(year, monthIndex + 1, 0, 23, 59, 59, 999);
+
+      query.createdAt = {
+        $gte: startOfMonth,
+        $lte: endOfMonth,
+      };
+    }
+
+    return this.patientBillModel.find(query).populate('items.item').exec();
   }
 
   async findOne(id: string): Promise<PatientBill> {

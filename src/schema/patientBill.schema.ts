@@ -21,6 +21,9 @@ export class PatientBill {
   @Prop({ required: true, type: Types.ObjectId, ref: Patient.name , index: true })
   patientId: Types.ObjectId;
 
+  @Prop({ required: true })
+  patientName: string;
+
   @Prop({ type: [BillItem], default: [] })
   items: BillItem[];
 

@@ -78,4 +78,40 @@ export class PrescriptionsService {
         }
         
     }
+
+    async getPrescriptionsById(id: string) {
+        const data = await this.prescriptionModel.findById(id);
+        if (!data) {
+            return {
+                status: 404,
+                message: 'Prescription not found',
+                data: null,
+                error: 'Not Found'
+            };
+        }
+        return {
+            status: 200,
+            message: 'Prescription retrieved successfully',
+            data: data,
+            error: null
+        };
+    }
+
+    async updatePrescription(id:string,updateData) {
+        const data = await this.prescriptionModel.findByIdAndUpdate(id, updateData, { new: true }).exec();
+        if (!data) {
+            return {
+                status: 404,
+                message: 'Prescription not found',
+                data: null,
+                error: 'Not Found'
+            };
+        }
+        return {
+            status: 200,
+            message: 'Prescription updated successfully',
+            data: data,
+            error: null
+        };
+    }
 }

@@ -43,6 +43,7 @@ export class UserController {
 
     @Put('/password/:id')
     async updatePassword(@Param('id') id, @Body() passwordData): Promise<any> {
+        console.log(passwordData)
         const data = await this.userService.updatePassword(id, passwordData);
         return data;
     }

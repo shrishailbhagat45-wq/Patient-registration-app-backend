@@ -5,7 +5,6 @@ import { BillingItem, BillingItemDocument } from 'src/schema/billingItem.schema'
 import { CreateBillingItemDto } from 'src/dto/create-billing-item.dto';
 import { UpdateBillingItemDto } from 'src/dto/update-billing-item.dto';
 
-import { error } from 'console';
 
 @Injectable()
 export class BillingService {

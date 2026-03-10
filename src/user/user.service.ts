@@ -3,9 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/schema/user.schema';
-import { retry } from 'rxjs';
-import { use } from 'passport';
-import { join } from 'path';
 
 @Injectable()
 export class UserService {
@@ -85,9 +82,17 @@ export class UserService {
 
     async updatePassword(id: string, passwordData: any) {
         try {
-            const hashedPassword = await bcrypt.hash(passwordData.password, 10);
-            const updatedUser = await this.userModel.findByIdAndUpdate(id, { $set: { password: hashedPassword } }, { new: true }).exec();
-            return updatedUser; 
+            const user = await this.userModel.findById(id).exec();
+            if (!user) {
+                return { status: 404, message: 'User not found', error: 'No user with the provided ID' };
+            }
+            const isPasswordMatch=await bcrypt.compare(passwordData.currentPassword,user.password)
+            if(!isPasswordMatch){
+                return { status: 400, message: 'Current password is incorrect', error: 'Incorrect current password' };
+            }
+            const hashedNewPassword = await bcrypt.hash(passwordData.newPassword, 10);
+            const updatedUser=await this.userModel.findByIdAndUpdate(id, { $set: { password: hashedNewPassword } }, { new: true }).exec();
+            return { status: 200, message: 'Password updated successfully', error: null, updatedUser };
         }
         catch (error) {
             console.error('Error updating password:', error);

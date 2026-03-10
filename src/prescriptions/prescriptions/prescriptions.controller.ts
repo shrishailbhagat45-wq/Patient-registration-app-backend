@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { PrescriptionsService } from './prescriptions.service';
 
 
@@ -24,4 +24,10 @@ export class PrescriptionsController {
         const data=await this.prescriptionsService.getPrescriptionsByIdWithPatientData(id);
         return data;
     }   
+
+    @Put('/:id')
+    async updatePrescription(@Param('id') id,@Body() updateData) {
+        const data=await this.prescriptionsService.updatePrescription(id,updateData);
+        return data;
+    }
 }

@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { PatientBillingService } from './patient-billing.service';
 import { CreatePatientBillDto } from 'src/dto/create-patient-bill.dto';
 import { UpdatePatientBillDto } from 'src/dto/update-patient-bill.dto';
+import { PatientBillingFilterDto } from 'src/dto/patient-billing-filter.dto';
 @Controller('patient-bills')
 export class PatientBillingController {
   constructor(private readonly patientBillService: PatientBillingService) {}
@@ -13,8 +14,8 @@ export class PatientBillingController {
   }
 
   @Get()
-  findAll() {
-    return this.patientBillService.findAll();
+  findAll(@Query() query: PatientBillingFilterDto) {
+    return this.patientBillService.findAll(query);
   }
 
   @Get(':id')
