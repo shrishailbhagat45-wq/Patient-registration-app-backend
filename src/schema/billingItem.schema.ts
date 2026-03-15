@@ -17,3 +17,5 @@ export class BillingItem {
 }
 
 export const BillingItemSchema = SchemaFactory.createForClass(BillingItem);
+
+BillingItemSchema.index({ doctorId: 1, name: 1 });
