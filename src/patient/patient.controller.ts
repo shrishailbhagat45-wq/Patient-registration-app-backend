@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { PatientDto } from 'src/dto/patient.dto';
+import { UpdatePatientDto } from 'src/dto/update-patient.dto';
 import { PatientService } from './patient.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/Role.decorator';
@@ -29,6 +30,14 @@ export class PatientController {
     @Get('/:id')
     async getSinglePatient(@Param('id') id: number): Promise<any> {
         const response = await this.patientService.getSinglePatient(id);
+        return response;
+    }
+
+    @Roles([Role.ADMIN,Role.DOCTOR])
+    @UseGuards(RolesGuard)
+    @Put('/:id')
+    async updatePatient(@Param('id') id: string, @Body() updatePatientData: UpdatePatientDto): Promise<any> {
+        const response = await this.patientService.updatePatient(id, updatePatientData);
         return response;
     }
 }

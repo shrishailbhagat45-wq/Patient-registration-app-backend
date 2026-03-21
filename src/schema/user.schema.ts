@@ -33,6 +33,12 @@ export class User {
     @Prop({ required: false })
     phoneNumber?: string;
 
+    @Prop({ required: false })
+    clinicAddress?: string;
+
+    @Prop({ required: false })
+    clinicName?: string;
+
     @Prop({ default: false })
     delete_status?: boolean;
 

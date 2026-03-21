@@ -23,4 +23,15 @@ export class PatientDto{
     @IsString()
     doctorId: string;
 
+    @IsOptional() @IsString() 
+    bloodPressure: string;
+
+    @IsOptional()
+    @IsNumber()
+    pulseRate: number;
+
+    @IsOptional()
+    @IsNumber()
+    bloodSugarLevel: number;
+
 }

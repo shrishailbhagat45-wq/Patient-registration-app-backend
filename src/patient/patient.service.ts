@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PatientDto } from 'src/dto/patient.dto';
+import { UpdatePatientDto } from 'src/dto/update-patient.dto';
 import { Patient } from 'src/schema/patient.schema';
 
 
@@ -122,9 +123,64 @@ export class PatientService {
     }
 
 
-    updatePatient(id: number, patientData: any): string {
+    async updatePatient(id: string, updatePatientData: UpdatePatientDto): Promise<any> {
         // Logic to update an existing patient
-        return `Patient with ID ${id} updated successfully`;
+        try {
+            const patient = await this.patientModel.findById(id);
+            
+            if (!patient) {
+                return {
+                    status: HttpStatus.NOT_FOUND,
+                    message: 'Patient not found',
+                    data: null,
+                    error: 'No patient found with the given ID'
+                };
+            }
+
+            // If phoneNumber is being updated, check for duplicates
+            if (updatePatientData.phoneNumber && updatePatientData.phoneNumber !== patient.phoneNumber) {
+                const existingPatient = await this.patientModel.findOne({
+                    phoneNumber: updatePatientData.phoneNumber,
+                    doctorId: patient.doctorId,
+                    _id: { $ne: id }
+                });
+
+                if (existingPatient) {
+                    return {
+                        status: HttpStatus.CONFLICT,
+                        message: 'Phone number already exists for this doctor',
+                        error: 'Phone number already in use for this doctor'
+                    };
+                }
+            }
+
+            const updatedPatient = await this.patientModel.findByIdAndUpdate(
+                id,
+                updatePatientData,
+                { new: true, runValidators: true }
+            );
+
+            if (!updatedPatient) {
+                return {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: 'Patient failed to update',
+                    error: 'Failed to update patient'
+                };
+            }
+
+            return {
+                status: HttpStatus.OK,
+                message: 'Patient updated successfully',
+                data: updatedPatient,
+                error: null
+            };
+        } catch (error) {
+            console.error('Error updating patient:', error);
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Something went wrong'
+            }, HttpStatus.INTERNAL_SERVER_ERROR, { cause: error });
+        }
     }
     deletePatient(id: number): string {
         // Logic to delete a patient

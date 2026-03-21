@@ -30,6 +30,15 @@ export class Patient {
   @Prop({ required: true })
   weight: number;
 
+  @Prop({ required: true })
+  bloodPressure: string;
+
+  @Prop({ required: true })
+  pulseRate: number;
+
+  @Prop({ required: true })
+  bloodSugarLevel: number;
+
   @Prop({ default: false })
   delete_status?: boolean;
 
