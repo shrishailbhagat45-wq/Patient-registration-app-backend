@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsPhoneNumber } from 'class-validator';
 import { Document, Types } from 'mongoose';
 
 export type PatientDocument = PatientQueue & Document;
@@ -16,8 +17,8 @@ const PatientQueueSchema=SchemaFactory.createForClass(PatientQueue);
 // TTL index: remove documents 1 day (86400 seconds) after createdAt
 PatientQueueSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 });
 
-// Compound index on mobile and name
-PatientQueueSchema.index({ mobile: 1, name: 1 });
+// Compound index on phoneNumber and name
+PatientQueueSchema.index({ phoneNumber: 1, name: 1 });
 
 
 

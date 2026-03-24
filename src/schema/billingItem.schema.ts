@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type BillingItemDocument = BillingItem & Document;
 
@@ -12,7 +12,7 @@ export class BillingItem {
   price: number;
 
   @Prop({ required: true })
-  doctorId: string;
+  doctorId: Types.ObjectId;
   
 }
 

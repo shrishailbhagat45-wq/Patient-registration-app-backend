@@ -9,7 +9,10 @@ class Drug {
   name: string;
 
   @Prop({ required: true })
-  strength: string;
+  content: string;
+
+  @Prop({ required: true })
+  company: string;
 
   @Prop({ required: true })
   quantity: string;

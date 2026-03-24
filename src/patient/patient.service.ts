@@ -19,7 +19,6 @@ export class PatientService {
                 phoneNumber: patientData.phoneNumber,
                 doctorId: patientData.doctorId
             });
-            console.log('Check phone number presence:', checkPhoneNumberIsPresent);
 
             if (checkPhoneNumberIsPresent) {
                 return {
