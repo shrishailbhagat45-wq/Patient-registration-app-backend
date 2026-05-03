@@ -21,7 +21,7 @@ export class PatientDto{
     weight: number;
 
     @IsString()
-    doctorId: string;
+    clinicId: string;
 
     @IsString() 
     @IsOptional() 

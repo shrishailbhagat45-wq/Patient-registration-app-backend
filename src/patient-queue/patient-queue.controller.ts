@@ -17,9 +17,8 @@ export class PatientQueueController {
         if(!patient) {
             throw new Error('No patient data provided');
         }
-        const patientDto={name:patient.patient.name,phoneNumber:patient.patient.phoneNumber};
-        console.log("patientDto",patientDto);
-        return this.patientQueueService.add(patientDto);
+        console.log("patientDto",patient);
+        return this.patientQueueService.add(patient);
     }
 
     @Delete(':id')

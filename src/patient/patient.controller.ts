@@ -20,8 +20,8 @@ export class PatientController {
     }
     
     @Post('getPatient')
-    async getPatients(@Body() name: string): Promise<any> {
-        const response = await this.patientService.getPatient(name);
+    async getPatients(@Body() Body:any): Promise<any> {
+        const response = await this.patientService.getPatient(Body);
         return response;
     }
     

@@ -20,8 +20,8 @@ export class UserController {
 
     }
     @Get('receptionists/:id')
-    async getReceptionists(@Param('id') doctorId): Promise<any> {
-        const data = await this.userService.getReceptionistsByDoctorId(doctorId);
+    async getReceptionists(@Param('id') clinicId): Promise<any> {
+        const data = await this.userService.getReceptionistsByClinicId(clinicId);
         console.log('Fetched receptionists:', data);
         return data;
     }

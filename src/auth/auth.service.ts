@@ -19,14 +19,14 @@ export class AuthService {
             throw new UnauthorizedException("Invalid credential")
         }
         console.log("user logged in successfully with email",user.email)
-        return{id:user._id,doctorId:user.doctorId,role:user.role};    
+        return{id:user._id,clinicId:user.clinicId,role:user.role};    
     }
 
     async login(userId:number){
         const payload:AuthJwtPayload={sub:userId}
         const token = this.JwtService.sign(payload)
         const user=await this.userService.findOne(userId)
-        return {id:user?._id,doctorId:user?.doctorId,role:user?.role,token:token}
+        return {id:user?._id,clinicId:user?.clinicId,role:user?.role,token:token}
     }
 
     async validateJwtUser(userId:number){
@@ -34,7 +34,7 @@ export class AuthService {
         if(!user){
             throw new UnauthorizedException("user not found")
         }
-        const currentUser={id:user._id,role:user.role,doctorId:user.doctorId}
+        const currentUser={id:user._id,role:user.role,clinicId:user.clinicId}
         return currentUser
     }
 }

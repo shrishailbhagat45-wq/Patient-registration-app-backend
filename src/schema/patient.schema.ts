@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-
 export type PatientDocument = Patient & Document;
 
 export enum Gender {
@@ -10,13 +9,22 @@ export enum Gender {
   Other = 'Other'
 }
 
-@Schema({ timestamps: true , autoIndex: true })
+@Schema({ timestamps: true, autoIndex: true })
 export class Patient {
+
   @Prop({ required: true, index: true, trim: true })
   name: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'doctorId', required: true, index: true })
-  doctorId: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Clinic', required: true, index: true ,
+    set: (value: string | Types.ObjectId) => {
+    if (typeof value === 'string') {
+      return new Types.ObjectId(value);
+    }
+    return value;
+  }
+  })
+  clinicId: Types.ObjectId;
 
   @Prop({ type: String, enum: Gender, required: true })
   gender: Gender;
@@ -44,14 +52,10 @@ export class Patient {
 
   @Prop({ type: Date, default: null })
   deletedAt?: Date;
-  
 }
 
-const PatientSchema = SchemaFactory.createForClass(Patient);
+export const PatientSchema = SchemaFactory.createForClass(Patient);
 
-PatientSchema.index({ name: 1, doctorId: 1 });
-
-export { PatientSchema };
-
-
-
+// 🔥 Better compound index
+PatientSchema.index({ clinicId: 1, name: 1 });
+PatientSchema.index({ clinicId: 1, phoneNumber: 1 });

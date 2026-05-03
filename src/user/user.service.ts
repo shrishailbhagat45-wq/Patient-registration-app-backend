@@ -36,8 +36,8 @@ export class UserService {
 
     async findUserByEmail(email:string) {
         const user=await this.userModel.findOne({
-            email:email
-        })
+            email:email,
+        } )
         return user;
     }
 
@@ -51,7 +51,7 @@ export class UserService {
     async addReceptionist(receptionistData: any) {
         const checkEmailIsPresent = await this.userModel.findOne({
             email: receptionistData.email,
-            doctorId: receptionistData.doctorId,
+            clinicId: receptionistData.clinicId,
         });
         if(checkEmailIsPresent) {
             return { status: 409, message: 'Email already exists', error: ' Email already in use' };
@@ -62,8 +62,8 @@ export class UserService {
         return newReceptionist.save();
     }
 
-    async getReceptionistsByDoctorId(doctorId: string) {
-        return this.userModel.find({ role: 'Receptionist', doctorId: doctorId }).exec();
+    async getReceptionistsByClinicId(clinicId: string) {
+        return this.userModel.find({ role: 'Receptionist', clinicId: clinicId }).exec();
     }
     
     deleteUser(id: string) {

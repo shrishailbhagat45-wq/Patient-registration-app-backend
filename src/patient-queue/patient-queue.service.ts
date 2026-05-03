@@ -28,8 +28,6 @@ export class PatientQueueService {
             const created = new this.patientQueueModel(patientDto);
             return created.save();
         }
-
-
     }
 
     async delete(id: string) {

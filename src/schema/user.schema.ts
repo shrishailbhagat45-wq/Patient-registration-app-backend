@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Clinic } from './clinic.schema'; // adjust path
 
 export type UserDocument = User & Document;
 
-export enum Role{
-    DOCTOR='Doctor', 
-    RECEPTIONIST='Receptionist',
-    MANAGER='Manager',
-    ADMIN='Admin'
+export enum Role {
+    DOCTOR = 'Doctor',
+    RECEPTIONIST = 'Receptionist',
+    ADMIN = 'Admin'
 }
 
 @Schema({ timestamps: true })
@@ -24,20 +24,15 @@ export class User {
     @Prop({ required: true, enum: Role })
     role: Role;
 
-    @Prop({ required: false })
-    doctorId?: Types.ObjectId;
+    // ✅ Clinic Reference
+    @Prop({ type: Types.ObjectId, ref: 'Clinic', required: true })
+    clinicId: Types.ObjectId;
 
     @Prop({required: false})
     specialization?: string;
 
     @Prop({ required: false })
     phoneNumber?: string;
-
-    @Prop({ required: false })
-    clinicAddress?: string;
-
-    @Prop({ required: false })
-    clinicName?: string;
 
     @Prop({ default: false })
     delete_status?: boolean;

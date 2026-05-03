@@ -24,6 +24,9 @@ import PatientQueueSchema from './schema/patientQueue';
 import { DrugsSchema } from './schema/drugs.schema';
 import { DrugsController } from './drugs/drugs.controller';
 import { DrugsService } from './drugs/drugs.service';
+import { ClinicSchema } from './schema/clinic.schema';
+import { ClinicController } from './clinic/clinic.controller';
+import { ClinicService } from './clinic/clinic.service';
 
 @Module({
   imports: [
@@ -42,11 +45,12 @@ import { DrugsService } from './drugs/drugs.service';
       {name: 'PatientBill', schema: PatientBillSchema},
       {name: 'PatientQueue', schema: PatientQueueSchema},
       { name: 'Drugs', schema: DrugsSchema },
+      { name: 'Clinic', schema: ClinicSchema }
      
     ]),
     AuthModule
   ],
-  controllers: [AppController, PatientController, PrescriptionsController, UserController, BillingController, PatientBillingController, PatientQueueController, DrugsController],
-  providers: [PatientService, PrescriptionsService, UserService, BillingService, PatientBillingService, PatientQueueService, DrugsService],
+  controllers: [AppController, PatientController, PrescriptionsController, UserController, BillingController, PatientBillingController, PatientQueueController, DrugsController, ClinicController,],
+  providers: [PatientService, PrescriptionsService, UserService, BillingService, PatientBillingService, PatientQueueService, DrugsService, ClinicService],
 })
 export class AppModule {}

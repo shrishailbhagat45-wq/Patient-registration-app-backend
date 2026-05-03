@@ -1,23 +1,25 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PatientDto } from 'src/dto/patient.dto';
 import { UpdatePatientDto } from 'src/dto/update-patient.dto';
 import { Patient } from 'src/schema/patient.schema';
+import { Types } from 'mongoose';
 
 
 @Injectable()
 export class PatientService {
-    constructor(@InjectModel('Patient') private patientModel:Model<Patient>) {
+    constructor(@InjectModel('Patient') private patientModel: Model<Patient>, @InjectModel('Clinic') private clinicModel: Model<any>) {
         // Initialization logic if needed
         console.log('PatientService initialized');
     }
     async createPatient(patientData: PatientDto): Promise<any> {
         // Logic to create a new patient
+        const clinicId =new Types.ObjectId(patientData.clinicId);
         try {
-            const checkPhoneNumberIsPresent = await this.patientModel.findOne({ 
+            const checkPhoneNumberIsPresent = await this.patientModel.findOne({
                 phoneNumber: patientData.phoneNumber,
-                doctorId: patientData.doctorId
+                clinicId: clinicId
             });
 
             if (checkPhoneNumberIsPresent) {
@@ -53,8 +55,7 @@ export class PatientService {
         }
     }
 
-    async getPatient(search) {
-
+    async getPatient(search: { name?: string; clinicId?: string }): Promise<any> {
         try {
             const query: any = {};
             
@@ -62,9 +63,10 @@ export class PatientService {
             if (search.name) {
                 query.name = { $regex: search.name, $options: 'i' };
             }
-              // Add doctorId filter if provided
-            if (search.doctorId) {
-                query.doctorId = search.doctorId;
+              // Add clinicId filter if provided
+            const clinicId = search.clinicId ? new Types.ObjectId(search.clinicId) : null;
+            if (search.clinicId) {
+                query.clinicId = clinicId;
             }
             
             const data = await this.patientModel.find(query)
@@ -72,6 +74,7 @@ export class PatientService {
                 .exec();
             
             if (data.length === 0) {
+                console.log('No patients found matching the search criteria:', search);
                 return {
                     status: HttpStatus.NOT_FOUND,
                     message: 'No patients found',
@@ -93,6 +96,7 @@ export class PatientService {
             }, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     async getSinglePatient(id: number): Promise<any> {
         try {
             const data = await this.patientModel.findById(id);
@@ -103,9 +107,9 @@ export class PatientService {
                     data: null,
                     error: 'No patient found with the given ID'
                 };
-            }      
+            }
             console.log('Retrieving patient with ID:', data);
-             
+
             return {
                 status: HttpStatus.OK,
                 message: 'Patient retrieved successfully',
@@ -114,7 +118,7 @@ export class PatientService {
             };
         } catch (error) {
             console.error('Error retrieving patient:', error);
-            throw new HttpException({   
+            throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
                 error: error.message || 'Something went wrong'
             }, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -126,7 +130,7 @@ export class PatientService {
         // Logic to update an existing patient
         try {
             const patient = await this.patientModel.findById(id);
-            
+
             if (!patient) {
                 return {
                     status: HttpStatus.NOT_FOUND,
@@ -140,7 +144,7 @@ export class PatientService {
             if (updatePatientData.phoneNumber && updatePatientData.phoneNumber !== patient.phoneNumber) {
                 const existingPatient = await this.patientModel.findOne({
                     phoneNumber: updatePatientData.phoneNumber,
-                    doctorId: patient.doctorId,
+                    clinicId: patient.clinicId,
                     _id: { $ne: id }
                 });
 
