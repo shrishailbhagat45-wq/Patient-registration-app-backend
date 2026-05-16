@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
+import { GetReceptionistsDto } from 'src/dto/get-receptionists.dto';
 
 @Controller('user')
 export class UserController {
@@ -19,13 +20,28 @@ export class UserController {
         return data;
 
     }
-    @Get('receptionists/:id')
-    async getReceptionists(@Param('id') clinicId): Promise<any> {
-        const data = await this.userService.getReceptionistsByClinicId(clinicId);
-        console.log('Fetched receptionists:', data);
+    @Post('receptionists')
+    async getReceptionists(@Body() body: GetReceptionistsDto): Promise<any> {
+        console.log(body)
+        const data = await this.userService.getReceptionistsByClinicId(body);
         return data;
     }
-    @Get('delete/:id')
+
+    @Post('addDoctor')
+    async addDoctor(@Body() body): Promise<any> {
+        const data= await this.userService.addDoctor(body)
+        return data;
+
+    }
+
+    @Get('doctors/:id')
+    async getDoctorByClinicId(@Param('id') id):Promise<any>{
+        console.log("id is",id)
+        const data= await this.userService.getDoctorByClinicId(id)
+        return data
+    }
+
+    @Delete('delete/:id')
     async deleteUser(@Param('id') id): Promise<any> {
         const data = await this.userService.deleteUser(id);
         return data;

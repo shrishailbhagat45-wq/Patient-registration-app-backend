@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post,Headers } from '@nestjs/common';
 import { PatientQueueService } from './patient-queue.service';
 
 @Controller('patient-queue')
@@ -7,9 +7,9 @@ export class PatientQueueController {
     constructor(private readonly patientQueueService:PatientQueueService) {}
 
     @Get()
-    getPatientInQueue() {    
+    getPatientInQueue(@Headers('doctorId') doctorId: string) {    
         const data= this.patientQueueService;
-        return data.findAll();
+        return data.findAll(doctorId); // Replace 'doctorId' with actual doctor ID as needed
     }
     @Post()
     addPatient(@Body() patient: any) {

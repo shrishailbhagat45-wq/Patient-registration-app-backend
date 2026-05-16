@@ -25,8 +25,29 @@ export class User {
     role: Role;
 
     // ✅ Clinic Reference
-    @Prop({ type: Types.ObjectId, ref: 'Clinic', required: true })
+    @Prop({ type: Types.ObjectId, ref: 'Clinic' ,set: (value: string | Types.ObjectId) => {
+    if (typeof value === 'string') {
+      return new Types.ObjectId(value);
+    }
+    return value;
+  } })
     clinicId: Types.ObjectId;
+
+    @Prop({ type: Types.ObjectId, ref: 'User', set: (value: string | Types.ObjectId) => {
+    if (typeof value === 'string') {
+      return new Types.ObjectId(value);
+    }
+    return value;
+  } })
+    doctorId?:Types.ObjectId
+
+    @Prop({ type: Types.ObjectId, ref: 'User', set: (value: string | Types.ObjectId) => {
+    if (typeof value === 'string') {
+      return new Types.ObjectId(value);
+    }
+    return value;
+  } })
+    adminId?: Types.ObjectId; 
 
     @Prop({required: false})
     specialization?: string;

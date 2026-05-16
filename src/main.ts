@@ -10,7 +10,7 @@ export const createNestApp = async () => {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
   app.enableCors({
-    origin: ['https://frontend-for-patient-registration-a.vercel.app', 'http://localhost:5173', 'http://localhost:3000'],
+    origin: ['https://frontend-for-patient-registration-a.vercel.app', 'http://localhost:5173', 'http://localhost:3000','http://localhost:5174'],
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe());

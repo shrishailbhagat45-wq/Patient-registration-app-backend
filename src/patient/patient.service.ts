@@ -1,10 +1,11 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PatientDto } from 'src/dto/patient.dto';
 import { UpdatePatientDto } from 'src/dto/update-patient.dto';
 import { Patient } from 'src/schema/patient.schema';
 import { Types } from 'mongoose';
+import { toTitleCase } from 'src/utils/commonFunctions';
 
 
 @Injectable()
@@ -30,7 +31,10 @@ export class PatientService {
                 };
             }
 
-            const newPatient = new this.patientModel(patientData);
+            const newPatient = new this.patientModel({
+                ...patientData,
+                name: toTitleCase(patientData.name)
+            });
             const data = await newPatient.save();
 
             if (!data) {

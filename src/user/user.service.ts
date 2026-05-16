@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/schema/user.schema';
+import { User, Role } from 'src/schema/user.schema';
+import { GetReceptionistsDto } from 'src/dto/get-receptionists.dto';
+import { CreateDoctorDto } from 'src/dto/create-doctor.dto';
 
 @Injectable()
 export class UserService {
@@ -48,6 +50,24 @@ export class UserService {
         return user
     }
 
+    async addDoctor(doctorData: CreateDoctorDto) {
+        const existingUser = await this.userModel.findOne({ email: doctorData.email });
+        if (existingUser) {
+            return { status: 409, message: 'Email already exists', error: 'Email already in use' };
+        }
+
+        const hashedPassword = await bcrypt.hash(doctorData.password, 10);
+        const data = {
+            ...doctorData,
+            password: hashedPassword,
+            role: Role.DOCTOR,
+        };
+
+        const newDoctor = new this.userModel(data);
+        const saved = await newDoctor.save();
+        return { message: 'Doctor created successfully', status: 201, error: null, doctorId: saved._id };
+    }
+
     async addReceptionist(receptionistData: any) {
         const checkEmailIsPresent = await this.userModel.findOne({
             email: receptionistData.email,
@@ -62,8 +82,20 @@ export class UserService {
         return newReceptionist.save();
     }
 
-    async getReceptionistsByClinicId(clinicId: string) {
+    async getReceptionistsByClinicId(data: GetReceptionistsDto) {
+        if(data.role==='Doctor'){
+            const doctorId= new Types.ObjectId(data.doctorId)
+            return this.userModel.find({ role: 'Receptionist', doctorId:doctorId }).exec();
+        }
+        const clinicId= new Types.ObjectId(data.clinicId)
         return this.userModel.find({ role: 'Receptionist', clinicId: clinicId }).exec();
+    }
+
+    
+
+    async getDoctorByClinicId(id:string){
+        const clinicId= new Types.ObjectId(id)
+        return this.userModel.find({ role: 'Doctor', clinicId: clinicId }).exec();
     }
     
     deleteUser(id: string) {

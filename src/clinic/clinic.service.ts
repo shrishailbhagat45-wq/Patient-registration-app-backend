@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { toTitleCase } from 'src/utils/commonFunctions';
 
 @Injectable()
 export class ClinicService {
@@ -32,9 +33,10 @@ export class ClinicService {
 
       const hashedPassword = await bcrypt.hash(clinicData.password, 10);
       const newUser = new this.userModel({
-        name: clinicData.name || " Admin",
+        name: toTitleCase(clinicData.adminName) || " Admin",
         email: clinicData.email, 
         password: hashedPassword,
+        phoneNumber: clinicData.phoneNumber,
         role: 'Admin',
         clinicId: savedClinic._id,
       });

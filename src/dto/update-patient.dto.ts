@@ -25,6 +25,10 @@ export class UpdatePatientDto {
     
     @IsOptional()
     @IsString()
+    address?: string;
+    
+    @IsOptional()
+    @IsString()
     bloodPressure?: string;
     
     @IsOptional()

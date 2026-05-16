@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { PatientQueue } from 'src/schema/patientQueue';
 
 @Injectable()
@@ -8,8 +8,9 @@ export class PatientQueueService {
     constructor(@InjectModel('PatientQueue') private readonly patientQueueModel: Model<PatientQueue>,
     ) {}
 
-    async findAll() {
-        return this.patientQueueModel.find().exec();
+    async findAll(doctorId: string) {
+        const doctorObjectId =new Types.ObjectId(doctorId); // Assuming doctorId is already a string, convert to ObjectId if needed
+        return this.patientQueueModel.find({ doctorId: doctorObjectId }).exec();
     }
 
     async add(patientDto: any) {

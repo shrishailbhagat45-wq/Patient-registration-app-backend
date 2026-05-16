@@ -26,7 +26,7 @@ export class AuthService {
         const payload:AuthJwtPayload={sub:userId}
         const token = this.JwtService.sign(payload)
         const user=await this.userService.findOne(userId)
-        return {id:user?._id,clinicId:user?.clinicId,role:user?.role,token:token}
+        return {id:user?._id,clinicId:user?.clinicId,role:user?.role,doctorId:user?.doctorId,token:token}
     }
 
     async validateJwtUser(userId:number){

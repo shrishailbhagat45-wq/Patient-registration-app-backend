@@ -23,6 +23,10 @@ export class PatientDto{
     @IsString()
     clinicId: string;
 
+    @IsString()
+    @IsOptional()
+    address: string;
+
     @IsString() 
     @IsOptional() 
     bloodPressure: string;

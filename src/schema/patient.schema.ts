@@ -39,6 +39,9 @@ export class Patient {
   weight: number;
 
   @Prop({ default: null })
+  address?: string;
+
+  @Prop({ default: null })
   bloodPressure?: string;
 
   @Prop({ default: null })
